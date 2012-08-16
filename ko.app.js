@@ -44,8 +44,8 @@ Application = function(app) {
         $(this).remove();
       });
     }).enter(function() {
-      $.each(app.filters, function(filter, pattern) {
-        if('exec' in pattern && pattern.exec(route) || pattern === route) {
+      $.each(app.filters, function(pattern, filter) {
+        if(pattern.exec && pattern.exec(route) || pattern === route) {
           filter.call(app, app.context);
         }
       });
