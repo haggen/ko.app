@@ -54,7 +54,11 @@ Application = function(app) {
 
   // Change current location
   app.redirect = function(route) {
-    location.hash = route;
+    if(route.indexOf('#') === 0) {
+      location.hash = route;
+    } else {
+      location.href = route;
+    }
   };
 
   // Choose which template will be rendered
