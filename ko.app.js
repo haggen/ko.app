@@ -4,7 +4,7 @@
  * licensed under http://creativecommons.org/licenses/by/3.0
  * more on http://haggen.github.com/ko.app
  */
-(function($, ko, undefined) {
+(function($, Path, ko, undefined) {
 
 var Application;
 
@@ -91,4 +91,4 @@ $('[data-bind="app"]').attr('data-bind', 'template: { name: template, data: cont
 // Expose plugin
 ko.app = Application;
 
-})(window.jQuery, window.ko);
+})(window.jQuery, window.Path, window.ko);
