@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>ko.app by haggen</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>ko.app</h1>
+        <p>Knockout Application</p>
+        <p class="view"><a href="https://github.com/haggen/ko.app">View the Project on GitHub <small>haggen/ko.app</small></a></p>
+        <ul>
+          <li><a href="https://github.com/haggen/ko.app/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/haggen/ko.app/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/haggen/ko.app">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Knockout Application</h1>
+
+<p>Knockout Application is a bridge to link routing, template rendering and data model bindings</p>
+
+<h2>Requirements:</h2>
+
+<ul>
+<li>Knockout 2.1 - <a href="https://github.com/stevesanderson/knockout">https://github.com/stevesanderson/knockout</a>
+</li>
+<li>Path.js - <a href="https://github.com/mtrpcic/pathjs/">https://github.com/mtrpcic/pathjs/</a>
+</li>
+<li>jQuery 1.7 - <a href="https://github.com/jquery/jquery">https://github.com/jquery/jquery</a>
+</li>
+</ul><h2>Usage:</h2>
+
+<p>In your HTML:</p>
+
+<pre><code>&lt;!doctype&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;Sample&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div data-bind="app"&gt;&lt;/div&gt;
+
+&lt;script src="knockout.js"&gt;&lt;/script&gt;
+&lt;script src="jquery.js"&gt;&lt;/script&gt;
+&lt;script src="path.js"&gt;&lt;/script&gt;
+
+&lt;script src="ko.app.js"&gt;&lt;/script&gt; &lt;!-- It's important to load it after the others --&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>In your JS:</p>
+
+<pre><code>var app;
+
+app = ko.app(function() {
+
+  this.map('#/hello', function(context) {
+    // context is the current view-model for the template
+    context.me = ko.observable('Nyan Cat');
+
+    // it tells the application which template to load
+    // currently, all template are loaded from '/templates' and must have '.html' extension
+    this.render('nyan');
+  });
+
+  this.root('#/hello');
+
+  this.run();
+});
+</code></pre>
+
+<p>In your template <code>/templates/nyan.html</code>:</p>
+
+<pre><code>&lt;p data-bind="text: me"&gt;&lt;/p&gt;
+</code></pre>
+
+<h2>API:</h2>
+
+<p>Note that <code>app</code> here will mean <code>this</code> inside application main function. See the example above.</p>
+
+<h3>
+<code>app.before(pattern, filter)</code>:</h3>
+
+<p>Register a filter to act before the routes that match the <code>pattern</code>. The <code>filter</code> is a function that may return <code>false</code> to prevent the current route of being processed, or redirect the user to another route.</p>
+
+<p>The filter function also receives the <code>context</code>. The <code>pattern</code> may be a string which will be compared to the route or a regex to match some or all the routes.</p>
+
+<h3>
+<code>app.map(route, action)</code>:</h3>
+
+<p>Register a new <code>action</code> to be called when <code>route</code> matches the current hash location. The action receives the context as first and only argument. The context is the view-model being applied to the template set by <code>render</code>.</p>
+
+<h3>
+<code>app.render(template)</code>:</h3>
+
+<p>...</p>
+
+<h3>
+<code>app.redirect(location)</code>:</h3>
+
+<p>...</p>
+
+<h3>
+<code>app.root(route)</code>:</h3>
+
+<p>...</p>
+
+<h3>
+<code>app.run()</code>:</h3>
+
+<p>...</p>
+
+<h2>Wishlist:</h2>
+
+<ul>
+<li>Session and cookie manager</li>
+<li>Querystring parameters</li>
+<li>Choose your own template engine</li>
+<li>Custom settings (like template directory)</li>
+</ul>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/haggen">haggen</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-34139820-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
