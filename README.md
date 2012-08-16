@@ -65,7 +65,7 @@ Note that `app` here will mean `this` inside your application's constructor. See
 
 ### `app.before(pattern, filter)`:
 
-Register a filter that will be executed before routes that match the `pattern`. The `filter` is a function that may return `false` to prevent the current route form being processed, define new observables in the `context` or redirect the user to another location.
+Register a filter that will be executed before routes that match the `pattern`. The `filter` is a function that may return `false` to prevent the current route from being processed, define new observables in the `context` or redirect the user to another location.
 
 The `pattern` may be a string or a regular expression. The `filter` receives one argument: the `context`.
 
