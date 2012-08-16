@@ -4,7 +4,7 @@ Knockout Application aims to be the link between every feature of a modern web a
 
 It should use existing libraries as much as possible and should provide an easy and familiar API to its users.
 
-It's currently in very early stages of development, bot already works, and should become a great tool to build killer apps.
+It's currently in very early stages of development, but already works, and should become a great tool to build killer apps.
 
 ## Requirements:
 
