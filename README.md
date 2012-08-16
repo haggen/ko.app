@@ -84,3 +84,10 @@ Register a new `action` to be called when `route` matches the current hash locat
 ### `app.run()`:
 
 ...
+
+## Wishlist:
+
+- Session and cookie manager
+- Querystring parameters
+- Choose your own template engine
+- Custom settings (like template directory)
