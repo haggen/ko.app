@@ -1,5 +1,5 @@
 /*
- * Knockout Application v0.0.1 2012-08-13 22:33:36 -0300
+ * Knockout Application v0.0.1 2012-08-16 10:38:08 -0300
  * by Arthur Corenzan <arthur@corenzan.com>
  * licensed under http://creativecommons.org/licenses/by/3.0
  * more on http://haggen.github.com/ko.app
@@ -10,44 +10,20 @@ var Application;
 
 Application = function(app) {
 
-  // Current model-view
+  // The context is the view-model bound to the template being rendered
   app.context = {};
 
-  // Route filters, hook with #before
+  // Filters are functions that will execute just before the routes their patterns matches
+  // They can return false to prevent the route from being executed, they can define
+  // new observables in the context or redirect the user to some other location
   app.filters = {};
-
-  // app.template = function(engine) {
-  //   if(engine === 'underscore' && '_' in window) {
-  //     // http://jsfiddle.net/6pStz/
-  //     /* ---- Begin integration of Underscore template engine with Knockout. Could go in a separate file of course. ---- */
-  //     ko.underscoreTemplateEngine = function() {};
-  //     ko.underscoreTemplateEngine.prototype = ko.utils.extend(new ko.templateEngine(), {
-  //       renderTemplateSource: function(templateSource, bindingContext, options) {
-  //         // Precompile and cache the templates for efficiency
-  //         var precompiled = templateSource['data']('precompiled');
-  //         if(!precompiled) {
-  //           precompiled = _.template("<% with($data) { %> " + templateSource.text() + " <% } %>");
-  //           templateSource['data']('precompiled', precompiled);
-  //         }
-  //         // Run the template and parse its output into an array of DOM elements
-  //         var renderedMarkup = precompiled(bindingContext).replace(/\s+/g, " ");
-  //         return ko.utils.parseHtmlFragment(renderedMarkup);
-  //       },
-  //       createJavaScriptEvaluatorBlock: function(script) {
-  //         return "<%= " + script + " %>";
-  //       }
-  //     });
-  //     ko.setTemplateEngine(new ko.underscoreTemplateEngine());
-  //     /* ---- End integration of Underscore template engine with Knockout ---- */
-  //   }
-  // };
 
   // Register new filter
   app.before = function(pattern, filter) {
     app.filters[pattern] = filter;
   };
 
-  // Map new route to some action
+  // Map new route and action
   app.map = function(route, action) {
     Path.map(route).to(function() {
       var template;
@@ -76,31 +52,36 @@ Application = function(app) {
     });
   };
 
-  // Change current hash/location
+  // Change current location
   app.redirect = function(route) {
-    // Path.history.pushState({}, '', route);
     location.hash = route;
   };
 
-  // Set current template to be loaded
+  // Choose which template will be rendered
   app.render = function(template) {
     app.template = template;
   };
 
-  // Set root route
+  // Define the root location
   app.root = function(route) {
     Path.root(route);
   };
 
-  // Setup application
+  // Run your application
+  // TODO: May contain more initialization code in the future
+  // TODO: Does it really need this method ?
   app.run = function() {
+    // Path listener to hash changes
     Path.listen();
-  };
+  }
 
+  // Your application constructor
   app.apply(app);
 };
 
-// @TODO Fix this later
+// This is a syntax sugar to make things easier and transparent,
+// but I didn't find a way to set the bindings dynamically
+// TODO: Fix this later
 $('[data-bind="app"]').attr('data-bind', 'template: { name: template, data: context }');
 
 // Expose plugin
