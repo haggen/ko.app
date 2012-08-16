@@ -1,35 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>ko.app by haggen</title>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="ko.app : Knockout Application" />
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <title>ko.app</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>ko.app</h1>
-        <p>Knockout Application</p>
-        <p class="view"><a href="https://github.com/haggen/ko.app">View the Project on GitHub <small>haggen/ko.app</small></a></p>
-        <ul>
-          <li><a href="https://github.com/haggen/ko.app/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/haggen/ko.app/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/haggen/ko.app">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/haggen/ko.app">View on GitHub</a>
+
+          <h1 id="project_title">ko.app</h1>
+          <h2 id="project_tagline">Knockout Application</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/haggen/ko.app/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/haggen/ko.app/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <h1>Knockout Application</h1>
 
-<p>Knockout Application is a bridge to link routing, template rendering and data model bindings</p>
+<p>Knockout Application aims to be the link between every feature of a modern web application, like routing hash locations, session management, template rendering, data bindings and much more stuff.</p>
+
+<p>It should use existing libraries as much as possible and should provide an easy and familiar API to its users.</p>
+
+<p>It's currently in very early stages of development, but already works, and should become a great tool to build killer apps.</p>
 
 <h2>Requirements:</h2>
 
@@ -92,39 +100,45 @@ app = ko.app(function() {
 
 <h2>API:</h2>
 
-<p>Note that <code>app</code> here will mean <code>this</code> inside application main function. See the example above.</p>
+<p>Note that <code>app</code> here will mean <code>this</code> inside your application's constructor. See the example above.</p>
 
 <h3>
 <code>app.before(pattern, filter)</code>:</h3>
 
-<p>Register a filter to act before the routes that match the <code>pattern</code>. The <code>filter</code> is a function that may return <code>false</code> to prevent the current route of being processed, or redirect the user to another route.</p>
+<p>Register a filter that will be executed before routes that match the <code>pattern</code>. The <code>filter</code> is a function that may return <code>false</code> to prevent the current route from being processed, define new observables in the <code>context</code> or redirect the user to another location.</p>
 
-<p>The filter function also receives the <code>context</code>. The <code>pattern</code> may be a string which will be compared to the route or a regex to match some or all the routes.</p>
+<p>The <code>pattern</code> may be a string or a regular expression. The <code>filter</code> receives one argument: the <code>context</code>.</p>
 
 <h3>
 <code>app.map(route, action)</code>:</h3>
 
-<p>Register a new <code>action</code> to be called when <code>route</code> matches the current hash location. The action receives the context as first and only argument. The context is the view-model being applied to the template set by <code>render</code>.</p>
+<p>Register a new <code>action</code> that will be executed when <code>route</code> matches the current location.</p>
+
+<p>The <code>route</code> must be a string starting with <code>#/</code>. The <code>action</code> receives the <code>context</code> as first and only argument.</p>
 
 <h3>
 <code>app.render(template)</code>:</h3>
 
-<p>...</p>
+<p>Define which template will be loaded and rendered. Currently, all templates must be in a <code>templates/</code> directory and use <code>.html</code> extension, but soon it will be customizable.</p>
+
+<p>The templates are the views for your application. Each route may load one template. But inside the templates you're free to use all the features of Knockout, like rendering another templates.</p>
+
+<p>The template rendered is bound to the <code>context</code>.</p>
 
 <h3>
 <code>app.redirect(location)</code>:</h3>
 
-<p>...</p>
+<p>Redirect the user to another location.</p>
 
 <h3>
 <code>app.root(route)</code>:</h3>
 
-<p>...</p>
+<p>Define a root route to redirect the user when the hash is empty.</p>
 
 <h3>
 <code>app.run()</code>:</h3>
 
-<p>...</p>
+<p>Initialize your application.</p>
 
 <h2>Wishlist:</h2>
 
@@ -133,14 +147,19 @@ app = ko.app(function() {
 <li>Querystring parameters</li>
 <li>Choose your own template engine</li>
 <li>Custom settings (like template directory)</li>
+<li>Error handling (?)</li>
 </ul>
       </section>
     </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/haggen">haggen</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">ko.app maintained by <a href="https://github.com/haggen">haggen</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -151,6 +170,7 @@ app = ko.app(function() {
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
+
 
   </body>
 </html>
