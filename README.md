@@ -16,11 +16,11 @@ It's currently in very early stages of development, but already works, and shoul
 
 In your HTML:
 
-    <!doctype>
+    <!doctype html>
     <html>
     <head>
       <meta charset="utf-8">
-      <title>Sample</title>
+      <title>ko.app example</title>
     </head>
     <body>
 
@@ -30,34 +30,33 @@ In your HTML:
     <script src="jquery.js"></script>
     <script src="path.js"></script>
 
-    <script src="ko.app.js"></script> <!-- It's important to load it after the others -->
+    <script src="ko.app.js"></script>
+
+    <script>
+      var app;
+
+      app = ko.app(function() {
+        this.map('#/hello/:name', function(context) {
+          context.name = ko.observable(this.params.name);
+          this.render('hello');
+        });
+
+        this.root('#/hello/world');
+
+        this.run();
+      });
+    </script>
 
     </body>
     </html>
 
-In your JS:
+In your template `/templates/hello.html`:
 
-    var app;
+    <p>Hello, <span data-bind="text: name"></span></p>
 
-    app = ko.app(function() {
+Now open `index.html` in your browser. Try changing `world` to your name, it works!
 
-      this.map('#/hello', function(context) {
-        // context is the current view-model for the template
-        context.me = ko.observable('Nyan Cat');
-
-        // it tells the application which template to load
-        // currently, all template are loaded from '/templates' and must have '.html' extension
-        this.render('nyan');
-      });
-
-      this.root('#/hello');
-
-      this.run();
-    });
-
-In your template `/templates/nyan.html`:
-
-    <p data-bind="text: me"></p>
+You can check this out in the `example/` directory.
 
 ## API:
 
