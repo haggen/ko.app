@@ -1,5 +1,5 @@
 /*
- * Knockout Application v0.0.1 2012-08-16 10:38:08 -0300
+ * Knockout Application v0.0.4 2012-08-20 17:28:18 -0300
  * by Arthur Corenzan <arthur@corenzan.com>
  * licensed under http://creativecommons.org/licenses/by/3.0
  * more on http://haggen.github.com/ko.app
@@ -10,7 +10,7 @@ var Application;
 
 Application = function(app) {
 
-  // The context is the view-model bound to the template being rendered
+  // The context is the current view-model bound to the template just rendered
   app.context = {};
 
   // Filters are functions that will execute just before the routes their patterns matches
@@ -24,9 +24,12 @@ Application = function(app) {
   };
 
   // Map new route and action
+  // TODO: missing 404 handler
   app.map = function(route, action) {
     Path.map(route).to(function() {
       var template;
+
+      app.params = this.params;
 
       action.call(app, app.context);
 
