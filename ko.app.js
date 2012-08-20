@@ -38,7 +38,7 @@ Application = function(app) {
       template.attr('id', app.template);
       $('body').append(template);
 
-      template.load('/templates/' + app.template + '.html', function() {
+      template.load('templates/' + app.template + '.html', function() {
         ko.applyBindings({
           template: app.template,
           context: app.context
