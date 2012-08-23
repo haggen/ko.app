@@ -1,16 +1,16 @@
 # Knockout Application
 
-Knockout Application aims to be the link between every feature of a modern web application, like routing hash locations, session management, template rendering, data bindings and much more stuff.
+Knockout Application aims to be the glue linking every feature of your modern web application, like routing URL, session management, template rendering, and off course, data bindings.
 
-It should use existing libraries as much as possible and should provide an easy and familiar API to its users.
+It should avail existing libraries as much as possible and provide an easy and familiar API to its users.
 
 It's currently in very early stages of development, but already works, and should become a great tool to build killer apps.
 
-## Requirements:
+## Dependencies:
 
-- Knockout 2.1 - https://github.com/stevesanderson/knockout
-- Path.js - https://github.com/mtrpcic/pathjs/
-- jQuery 1.7 - https://github.com/jquery/jquery
+- (Knockout 2.1)[https://github.com/stevesanderson/knockout]
+- (WayJS 0.1)[https://github.com/haggen/wayjs]
+- (jQuery 1.7)[https://github.com/jquery/jquery]
 
 ## Usage:
 
@@ -28,20 +28,18 @@ In your HTML:
 
     <script src="knockout.js"></script>
     <script src="jquery.js"></script>
-    <script src="path.js"></script>
+    <script src="way.js"></script>
 
-    <script src="ko.app.js"></script>
+    <script src="../ko.app.js"></script>
 
     <script>
-      var app;
-
-      app = ko.app(function() {
+      ko.app(function() {
         this.map('#/hello/:name', function(context) {
           context.name = ko.observable(this.params.name);
           this.render('hello');
         });
 
-        this.root('#/hello/world');
+        this.root = '#/hello/world';
 
         this.run();
       });
@@ -50,17 +48,18 @@ In your HTML:
     </body>
     </html>
 
+
 In your template `/templates/hello.html`:
 
     <p>Hello, <span data-bind="text: name"></span></p>
 
 Now open `index.html` in your browser. Try changing `world` to your name, it works!
 
-You can check this out in the `example/` directory.
+You can see a working version of this example in the `example/` directory.
 
 ## API:
 
-Note that `app` here will mean `this` inside your application's constructor. See the example above.
+Note that `app` here will mean `this` inside your application's constructor.
 
 ### `app.before(pattern, filter)`:
 
@@ -68,11 +67,11 @@ Register a filter that will be executed before routes that match the `pattern`. 
 
 The `pattern` may be a string or a regular expression. The `filter` receives one argument: the `context`.
 
-### `app.map(route, action)`:
+### `app.map(pattern, action)`:
 
-Register a new `action` that will be executed when `route` matches the current location.
+Register a new `action` that will be executed when `pattern` matches the current location.
 
-The `route` must be a string starting with `#/`. The `action` receives the `context` as first and only argument.
+The `route` must be a path starting with `#/`. The `action` receives the `context` as first and only argument.
 
 ### `app.render(template)`:
 
@@ -82,17 +81,17 @@ The templates are the views for your application. Each route may load one templa
 
 The template rendered is bound to the `context`.
 
-### `app.redirect(location)`:
+### `app.redirect(path)`:
 
 Redirect the user to another location.
 
-### `app.root(route)`:
+### `app.root = '#/'`:
 
 Define a root route to redirect the user when the hash is empty.
 
 ### `app.run()`:
 
-Initialize your application.
+Setup your application.
 
 ## Wishlist:
 
