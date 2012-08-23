@@ -8,9 +8,9 @@ It's currently in very early stages of development, but already works, and shoul
 
 ## Dependencies:
 
-- (Knockout 2.1)[https://github.com/stevesanderson/knockout]
-- (WayJS 0.1)[https://github.com/haggen/wayjs]
-- (jQuery 1.7)[https://github.com/jquery/jquery]
+- Knockout 2.1 - https://github.com/stevesanderson/knockout
+- WayJS 0.1 - https://github.com/haggen/wayjs
+- jQuery 1.7 - https://github.com/jquery/jquery
 
 ## Usage:
 
