@@ -10,20 +10,16 @@
 
 <script src="knockout.js"></script>
 <script src="jquery.js"></script>
-<script src="path.js"></script>
+<script src="way.js"></script>
 
-<script src="ko.app.js"></script>
+<script src="../ko.app.js"></script>
 
 <script>
-  var app;
-
-  app = ko.app(function() {
+  ko.app(function() {
     this.map('#/hello/:name', function(context) {
       context.name = ko.observable(this.params.name);
       this.render('hello');
     });
-
-    this.root('#/hello');
 
     this.run();
   });

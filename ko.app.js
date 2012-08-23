@@ -4,11 +4,17 @@
  * licensed under http://creativecommons.org/licenses/by/3.0
  * more on http://haggen.github.com/ko.app
  */
-(function($, Path, ko, undefined) {
+(function($, way, ko, undefined) {
 
 var Application;
 
 Application = function(app) {
+
+  // Root location
+  app.root = '#/';
+
+  // Current location
+  app.path = '';
 
   // The context is the current view-model bound to the template just rendered
   app.context = {};
@@ -26,10 +32,10 @@ Application = function(app) {
   // Map new route and action
   // TODO: missing 404 handler
   app.map = function(route, action) {
-    Path.map(route).to(function() {
+    way.map(route, function() {
       var template;
 
-      app.params = this.params;
+      app.params = way.params;
 
       action.call(app, app.context);
 
@@ -45,12 +51,6 @@ Application = function(app) {
         });
 
         $(this).remove();
-      });
-    }).enter(function() {
-      $.each(app.filters, function(pattern, filter) {
-        if(pattern.exec && pattern.exec(route) || pattern === route) {
-          filter.call(app, app.context);
-        }
       });
     });
   };
@@ -69,18 +69,43 @@ Application = function(app) {
     app.template = template;
   };
 
-  // Define the root location
-  app.root = function(route) {
-    Path.root(route);
+  // Monitor hash changes and dispatch actions
+  app.listen = function() {
+    var fn;
+
+    fn = function() {
+      var path, action;
+
+      path = location.hash;
+
+      if(path !== app.path) {
+        app.path = path;
+        action = way.match(path) || way.match('#/404');
+
+        if(action !== undefined) {
+          action();
+        }
+      }
+    };
+
+    // Snippet stolen from https://github.com/mtrpcic/pathjs
+    // The 'document.documentMode' checks below ensure that it
+    // fires the right events even in IE "Quirks Mode".
+    if('onhashchange' in window && (!document.documentMode || document.documentMode >= 8)) {
+      window.onhashchange = fn;
+    } else {
+      setInterval(fn, 50);
+    }
   };
 
-  // Run your application
-  // TODO: May contain more initialization code in the future
-  // TODO: Does it really need this method ?
+  // Setup your application
   app.run = function() {
-    // Path listener to hash changes
-    Path.listen();
-  }
+    app.listen();
+
+    if(location.hash === '') {
+      app.redirect(app.root);
+    }
+  };
 
   // Your application constructor
   app.apply(app);
@@ -94,4 +119,4 @@ $('[data-bind="app"]').attr('data-bind', 'template: { name: template, data: cont
 // Expose plugin
 ko.app = Application;
 
-})(window.jQuery, window.Path, window.ko);
+})(window.jQuery, window.way, window.ko);
