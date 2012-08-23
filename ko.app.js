@@ -1,5 +1,5 @@
 /*
- * Knockout Application v0.0.4 2012-08-20 17:28:18 -0300
+ * Knockout Application v0.1.0 2012-08-23 20:35:36 -0300
  * by Arthur Corenzan <arthur@corenzan.com>
  * licensed under http://creativecommons.org/licenses/by/3.0
  * more on http://haggen.github.com/ko.app
@@ -112,11 +112,11 @@ Application = function(app) {
 };
 
 // This is a syntax sugar to make things easier and transparent,
-// but I didn't find a way to set the bindings dynamically
-// TODO: Fix this later
+// but I didn't find a way to set the bindings dynamically, so..
+// TODO: Fix this later, it shouldn't use jQuery
 $('[data-bind="app"]').attr('data-bind', 'template: { name: template, data: context }');
 
-// Expose plugin
+// Expose constructor
 ko.app = Application;
 
 })(window.jQuery, window.way, window.ko);
