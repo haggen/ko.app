@@ -11,6 +11,7 @@ It's currently in very early stages of development, but already works, and shoul
 - Knockout 2.1 - https://github.com/stevesanderson/knockout
 - WayJS 0.1 - https://github.com/haggen/wayjs
 - jQuery 1.7 - https://github.com/jquery/jquery
+- Cookies 0.2 - https://github.com/scotthamper/cookies
 
 ## Usage:
 
@@ -48,7 +49,6 @@ In your HTML:
     </body>
     </html>
 
-
 In your template `/templates/hello.html`:
 
     <p>Hello, <span data-bind="text: name"></span></p>
@@ -59,44 +59,51 @@ You can see a working version of this example in the `example/` directory.
 
 ## API:
 
-Note that `app` here will mean `this` inside your application's constructor.
+Note that inside your application's constructor you can access `app` by `this`.
 
-### `app.before(pattern, filter)`:
+### \#map
 
-Register a filter that will be executed before routes that match the `pattern`. The `filter` is a function that may return `false` to prevent the current route from being processed, define new observables in the `context` or redirect the user to another location.
+    map(string pattern, function(context) action)
 
-The `pattern` may be a string or a regular expression. The `filter` receives one argument: the `context`.
+Map new route to given action. Actions may return `true` to chain more routes that matches the current path. Also within the action `this` refers to the application.
 
-### `app.map(pattern, action)`:
+### \#session
 
-Register a new `action` that will be executed when `pattern` matches the current location.
+    session(string name[, string value])
 
-The `route` must be a path starting with `#/`. The `action` receives the `context` as first and only argument.
+Retrieve session variable when value is omitted, otherwise update it with given value. Also `value` may be `null` to delete given session variable.
 
-### `app.render(template)`:
+### \#redirect
 
-Define which template will be loaded and rendered. Currently, all templates must be in a `templates/` directory and use `.html` extension, but soon it will be customizable.
+    redirect(string path)
 
-The templates are the views for your application. Each route may load one template. But inside the templates you're free to use all the features of Knockout, like rendering another templates.
+Redirect user to given location.
 
-The template rendered is bound to the `context`.
+### \#render
 
-### `app.redirect(path)`:
+    render(string template)
 
-Redirect the user to another location.
+Render given template and bind current context to it. Template files must be in `templates/` directory and must use `.html` extension.
 
-### `app.root = '#/'`:
+### \#dispatch
 
-Define a root route to redirect the user when the hash is empty.
+    dispatch()
 
-### `app.run()`:
+Match and dispatch an action based on current location.
 
-Setup your application.
+### \#listen
 
-## Wishlist:
+    listen()
 
-- Session and cookie manager
-- Querystring parameters
-- Choose your own template engine
+Listen to hash changes.
+
+### \#run
+
+    run()
+
+Setup and initialize your application.
+
+## Roadmap:
+
+- <del>Session management</del>
 - Custom settings (like template directory)
-- Error handling (?)
