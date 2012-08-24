@@ -1,5 +1,5 @@
 /*
- * Knockout Application v0.1.0 2012-08-23 20:35:36 -0300
+ * Knockout Application v0.2.0 2012-08-24 12:17:08 -0300
  * by Arthur Corenzan <arthur@corenzan.com>
  * licensed under http://creativecommons.org/licenses/by/3.0
  * more on http://haggen.github.com/ko.app
@@ -16,43 +16,31 @@ Application = function(app) {
   // Current location
   app.path = '';
 
-  // The context is the current view-model bound to the template just rendered
+  // Context bound to the template
   app.context = {};
 
-  // Filters are functions that will execute just before the routes their patterns matches
-  // They can return false to prevent the route from being executed, they can define
-  // new observables in the context or redirect the user to some other location
-  app.filters = {};
+  // Template name
+  app.template = '';
 
-  // Register new filter
-  app.before = function(pattern, filter) {
-    app.filters[pattern] = filter;
-  };
+  // Route parameters
+  app.params = {};
 
   // Map new route and action
-  // TODO: missing 404 handler
-  app.map = function(route, action) {
-    way.map(route, function() {
-      var template;
+  app.map = function(pattern, action) {
+    way.map(pattern, action);
+  };
 
-      app.params = way.params;
+  // Session management
+  app.session = function(name, value) {
+    if(value !== undefined) {
+      if(value === null) {
+        Cookies.expire(name);
+      } else {
+        Cookies.set(name, value);
+      }
+    }
 
-      action.call(app, app.context);
-
-      template = $('<script type="text/html"></script>');
-
-      template.attr('id', app.template);
-      $('body').append(template);
-
-      template.load('templates/' + app.template + '.html', function() {
-        ko.applyBindings({
-          template: app.template,
-          context: app.context
-        });
-
-        $(this).remove();
-      });
-    });
+    return Cookies.get(name);
   };
 
   // Change current location
@@ -64,37 +52,59 @@ Application = function(app) {
     }
   };
 
-  // Choose which template will be rendered
+  // Render template
   app.render = function(template) {
     app.template = template;
+
+    template = $('<script type="text/html"></script>');
+
+    template.attr('id', app.template);
+    $('body').append(template);
+
+    // TODO: templates directory should be customizable
+    template.load('templates/' + app.template + '.html', function() {
+      ko.applyBindings({
+        template: app.template,
+        context: app.context
+      });
+
+      $(this).remove();
+    });
   };
 
-  // Monitor hash changes and dispatch actions
-  app.listen = function() {
-    var fn;
+  // Dispatch action based on route matching
+  app.dispatch = function() {
+    var path, matches, i;
 
-    fn = function() {
-      var path, action;
+    path = location.hash;
 
-      path = location.hash;
+    if(path !== app.path) {
+      app.path = path;
+      matches = way.match(path);
 
-      if(path !== app.path) {
-        app.path = path;
-        action = way.match(path) || way.match('#/404');
+      if(matches.length === 0) {
+        matches = way.match('#/404');
+      }
 
-        if(action !== undefined) {
-          action();
+      for(i = 0; i < matches.length; i++) {
+        app.params = matches[i].params;
+
+        if(!matches[i].action.call(app, app.context)) {
+          break;
         }
       }
-    };
+    }
+  };
 
+  // Monitor hash changes
+  app.listen = function() {
     // Snippet stolen from https://github.com/mtrpcic/pathjs
     // The 'document.documentMode' checks below ensure that it
     // fires the right events even in IE "Quirks Mode".
     if('onhashchange' in window && (!document.documentMode || document.documentMode >= 8)) {
-      window.onhashchange = fn;
+      window.onhashchange = app.dispatch;
     } else {
-      setInterval(fn, 50);
+      setInterval(app.dispatch, 50);
     }
   };
 
@@ -105,6 +115,8 @@ Application = function(app) {
     if(location.hash === '') {
       app.redirect(app.root);
     }
+
+    app.dispatch();
   };
 
   // Your application constructor
