@@ -1,5 +1,5 @@
 /*
- * Knockout Application v0.2.0 2012-08-24 12:17:08 -0300
+ * Knockout Application v0.2.1 2012-08-31 11:21:07 -0300
  * by Arthur Corenzan <arthur@corenzan.com>
  * licensed under http://creativecommons.org/licenses/by/3.0
  * more on http://haggen.github.com/ko.app
@@ -46,7 +46,11 @@ Application = function(app) {
   // Change current location
   app.redirect = function(route) {
     if(route.indexOf('#') === 0) {
-      location.hash = route;
+      if(location.hash === route) {
+        app.dispatch();
+      } else {
+        location.hash = route;
+      }
     } else {
       location.href = route;
     }
