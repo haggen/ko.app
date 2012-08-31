@@ -77,12 +77,12 @@ Application = function(app) {
   };
 
   // Dispatch action based on route matching
-  app.dispatch = function() {
+  app.dispatch = function(force) {
     var path, matches, i;
 
     path = location.hash;
 
-    if(path !== app.path) {
+    if(path !== app.path || force) {
       app.path = path;
       matches = way.match(path);
 
