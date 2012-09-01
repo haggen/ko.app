@@ -4,11 +4,20 @@
  * licensed under http://creativecommons.org/licenses/by/3.0
  * more on http://haggen.github.com/ko.app
  */
-(function($, way, ko, undefined) {
+(function(window, undefined){ 
+!function (factory) {
+  if (typeof define === 'function' && define['amd']) {
+    // [0] AMD anonymous module
+    define(['jquery', 'way', 'knockout', 'cookies'], factory);
+  } else {
+    // [1] No module loader (plain <script> tag) - put directly in global namespace
+    factory(window.jQuery, window.way, window.ko, window.Cookies);
+  }
+}(function($, wayjs, ko, cookies) { // implement amd for wayjs and cookies
 
-var Application;
+  var Application;
 
-Application = function(app) {
+  Application = function(app) {
 
   // Root location
   app.root = '#/';
@@ -130,5 +139,6 @@ $('[data-bind="app"]').attr('data-bind', 'template: { name: template, data: cont
 
 // Expose constructor
 ko.app = Application;
-
-})(window.jQuery, window.way, window.ko);
+return Application;
+});
+})(window);
