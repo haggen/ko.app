@@ -1,5 +1,5 @@
 /*
- * Knockout Application v0.2.3 2012-09-06 00:20:40 -0300
+ * Knockout Application v0.2.4 2012-09-06 13:09:35 -0300
  * by Arthur Corenzan <arthur@corenzan.com>
  * licensed under http://creativecommons.org/licenses/by/3.0
  * more on http://haggen.github.com/ko.app
@@ -94,10 +94,10 @@
             }
           }
 
-          app.params = match[i].params;
+          app.params = match.params;
 
           for(i = 0; i < match.actions.length; i++) {
-            if(!match.actions[i].call(app, app.context)) {
+            if(match.actions[i].call(app, app.context) !== true) {
               break;
             }
           }
