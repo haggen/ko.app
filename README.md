@@ -67,23 +67,23 @@ Also I've included another example to demo the usage of [requirejs](http://requi
 
 Note that inside your application's constructor you can access `app` by `this`.
 
-### `map(string pattern, function(context) action[, function(context) action[, ...]])`
+### `map(pattern, action[, action[, ...]])`
 
 Register new route. Actions may return `true` to keep chaining the next action. Also within the action `this` refers to the application.
 
-### `session(string name[, string value|null])`
+### `session(name[, value])`
 
 Retrieve session variable when value is omitted, or update it with given value. Also `value` may be `null` to delete session variable.
 
-### `redirect(string path)`
+### `redirect(path)`
 
 Redirect user to given location, aware of hash or external redirections.
 
-### `render(string template)`
+### `render(template)`
 
 Render given template and bind current context to it. Template files must be in `templates/` directory and must use `.html` extension.
 
-### `dispatch([bool force])`
+### `dispatch([force])`
 
 Match and dispatch an action based on current location.
 
