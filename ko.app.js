@@ -1,138 +1,146 @@
 /*
- * Knockout Application v0.2.1 2012-08-31 11:21:07 -0300
+ * Knockout Application v0.2.2 2012-09-05 22:19:32 -0300
  * by Arthur Corenzan <arthur@corenzan.com>
  * licensed under http://creativecommons.org/licenses/by/3.0
  * more on http://haggen.github.com/ko.app
  */
-(function($, way, ko, undefined) {
+(function(window, undefined) {
 
-var Application;
+  // Factory
+  var fn = function($, way, ko, Cookies) {
+    var Application = function(app) {
 
-Application = function(app) {
+      // Root location
+      app.root = '#/';
 
-  // Root location
-  app.root = '#/';
+      // Location currently dispatched
+      app.location = '';
 
-  // Current location
-  app.path = '';
+      // Context bound to the template
+      app.context = {};
 
-  // Context bound to the template
-  app.context = {};
+      // Template name
+      app.template = '';
 
-  // Template name
-  app.template = '';
+      // Route parameters
+      app.params = {};
 
-  // Route parameters
-  app.params = {};
+      // Map new route and action
+      app.map = function(pattern, action) {
+        way.map(pattern, action);
+      };
 
-  // Map new route and action
-  app.map = function(pattern, action) {
-    way.map(pattern, action);
-  };
-
-  // Session management
-  app.session = function(name, value) {
-    if(value !== undefined) {
-      if(value === null) {
-        Cookies.expire(name);
-      } else {
-        Cookies.set(name, value);
-      }
-    }
-
-    return Cookies.get(name);
-  };
-
-  // Change current location
-  app.redirect = function(route) {
-    if(route.indexOf('#') === 0) {
-      if(location.hash === route) {
-        app.dispatch();
-      } else {
-        location.hash = route;
-      }
-    } else {
-      location.href = route;
-    }
-  };
-
-  // Render template
-  app.render = function(template) {
-    app.template = template;
-
-    template = $('<script type="text/html"></script>');
-
-    template.attr('id', app.template);
-    $('body').append(template);
-
-    // TODO: templates directory should be customizable
-    template.load('templates/' + app.template + '.html', function() {
-      ko.applyBindings({
-        template: app.template,
-        context: app.context
-      });
-
-      $(this).remove();
-    });
-  };
-
-  // Dispatch action based on route matching
-  app.dispatch = function(force) {
-    var path, matches, i;
-
-    path = location.hash;
-
-    if(path !== app.path || force) {
-      app.path = path;
-      matches = way.match(path);
-
-      if(matches.length === 0) {
-        matches = way.match('#/404');
-      }
-
-      for(i = 0; i < matches.length; i++) {
-        app.params = matches[i].params;
-
-        if(!matches[i].action.call(app, app.context)) {
-          break;
+      // Session management
+      app.session = function(name, value) {
+        if(value !== undefined) {
+          if(value === null) {
+            Cookies.expire(name);
+          } else {
+            Cookies.set(name, value);
+          }
         }
-      }
-    }
+
+        return Cookies.get(name);
+      };
+
+      // Change current location
+      app.redirect = function(route) {
+        if(route.indexOf('#') === 0) {
+          if(location.hash === route) {
+            app.dispatch();
+          } else {
+            location.hash = route;
+          }
+        } else {
+          location.href = route;
+        }
+      };
+
+      // Render template
+      app.render = function(template) {
+        app.template = template;
+
+        template = $('<script type="text/html"></script>');
+
+        template.attr('id', app.template);
+        $('body').append(template);
+
+        // TODO: templates directory should be customizable
+        template.load('templates/' + app.template + '.html', function() {
+          ko.applyBindings({
+            template: app.template,
+            context: app.context
+          });
+
+          $(this).remove();
+        });
+      };
+
+      // Dispatch action based on route matching
+      app.dispatch = function(force) {
+        var path, matches, i;
+
+        path = location.hash;
+
+        if(path !== app.location || force) {
+          app.location = path;
+          matches = way.match(path);
+
+          if(matches.length === 0) {
+            matches = way.match('#/404');
+          }
+
+          for(i = 0; i < matches.length; i++) {
+            app.params = matches[i].params;
+
+            if(!matches[i].action.call(app, app.context)) {
+              break;
+            }
+          }
+        }
+      };
+
+      // Monitor hash changes
+      app.listen = function() {
+        // Snippet stolen from https://github.com/mtrpcic/pathjs
+        // The 'document.documentMode' checks below ensure that it
+        // fires the right events even in IE "Quirks Mode".
+        if('onhashchange' in window && (!document.documentMode || document.documentMode >= 8)) {
+          window.onhashchange = app.dispatch;
+        } else {
+          setInterval(app.dispatch, 50);
+        }
+      };
+
+      // Setup your application
+      app.run = function() {
+        app.listen();
+
+        if(location.hash === '') {
+          app.redirect(app.root);
+        }
+
+        app.dispatch();
+      };
+
+      // Your application constructor
+      app.apply(app);
+    };
+
+    // This is a syntax sugar to make things easier and transparent,
+    // but I didn't find a way to set the bindings dynamically, so..
+    // TODO: Fix this later, it shouldn't use jQuery
+    $('[data-bind="app"]').attr('data-bind', 'template: { name: template, data: context }');
+
+    // Expose plugin constructor and module
+    return ko.app = Application;
   };
 
-  // Monitor hash changes
-  app.listen = function() {
-    // Snippet stolen from https://github.com/mtrpcic/pathjs
-    // The 'document.documentMode' checks below ensure that it
-    // fires the right events even in IE "Quirks Mode".
-    if('onhashchange' in window && (!document.documentMode || document.documentMode >= 8)) {
-      window.onhashchange = app.dispatch;
-    } else {
-      setInterval(app.dispatch, 50);
-    }
-  };
+  // Switch between AMD and plain script loading, as suggested by @adimkov
+  if(typeof window.define === 'function' && 'amd' in window.define) {
+    window.define(['jquery', 'way', 'knockout', 'Cookies'], fn);
+  } else {
+    fn(window.jQuery, window.way, window.ko, window.Cookies);
+  }
 
-  // Setup your application
-  app.run = function() {
-    app.listen();
-
-    if(location.hash === '') {
-      app.redirect(app.root);
-    }
-
-    app.dispatch();
-  };
-
-  // Your application constructor
-  app.apply(app);
-};
-
-// This is a syntax sugar to make things easier and transparent,
-// but I didn't find a way to set the bindings dynamically, so..
-// TODO: Fix this later, it shouldn't use jQuery
-$('[data-bind="app"]').attr('data-bind', 'template: { name: template, data: context }');
-
-// Expose constructor
-ko.app = Application;
-
-})(window.jQuery, window.way, window.ko);
+})(window);
