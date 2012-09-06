@@ -1,5 +1,5 @@
 /*
- * Knockout Application v0.2.2 2012-09-05 22:19:32 -0300
+ * Knockout Application v0.2.3 2012-09-06 00:20:40 -0300
  * by Arthur Corenzan <arthur@corenzan.com>
  * licensed under http://creativecommons.org/licenses/by/3.0
  * more on http://haggen.github.com/ko.app
@@ -78,22 +78,26 @@
 
       // Dispatch action based on route matching
       app.dispatch = function(force) {
-        var path, matches, i;
+        var path, match, i;
 
         path = location.hash;
 
         if(path !== app.location || force) {
           app.location = path;
-          matches = way.match(path);
+          match = way.match(path);
 
-          if(matches.length === 0) {
-            matches = way.match('#/404');
+          if(match === undefined) {
+            match = way.match('#/404');
+
+            if(match === undefined) {
+              throw 'No route match and missing 404';
+            }
           }
 
-          for(i = 0; i < matches.length; i++) {
-            app.params = matches[i].params;
+          app.params = match[i].params;
 
-            if(!matches[i].action.call(app, app.context)) {
+          for(i = 0; i < match.actions.length; i++) {
+            if(!match.actions[i].call(app, app.context)) {
               break;
             }
           }
