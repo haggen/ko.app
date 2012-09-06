@@ -1,8 +1,7 @@
 /*
- * WayJS v0.2.0 2012-08-24 18:47:20 -0300
+ * WayJS v0.3.3 2012-09-05 23:14:53 -0300
  * by Arthur Corenzan <arthur@corenzan.com>
  * licensed under http://creativecommons.org/licenses/by/3.0
  * more on http://haggen.github.com/wayjs
  */
-(function(){var c;c=function(){this.routes=[]};c.prototype={map:function(d,b){var a={params:[]};a.action=b;a.pattern=this.translate(d,a);this.routes.push(a)},translate:function(d,b){var a;a=d.replace(/\//g,"\\/");a=a.replace(/\)/g,function(){return")?"});a=a.replace(/:(\w[\w\d]*)|\(/g,function(a,d){b.params.push("("===a?"_":d);return"("===a?"(":"([^\\/]+?)"});a=a.replace(/\*/g,function(){b.params.push("splat");return"(.+?)"});return RegExp("^"+a+"$")},match:function(d){var b,a,c,g,f,e;c=[];for(f=
-0;f<this.routes.length;f++)if(b=this.routes[f],a={action:b.action,params:[]},g=d.match(b.pattern)){for(e=1;e<g.length;e++)a.params[b.params[e-1]]=g[e];c.push(a)}return c}};"undefined"===typeof window?module.exports=new c:window.way=new c})();
+(function(e){"use strict";var t;t=function(){this.routes=[]},t.prototype={map:function(){var e={};e.params=[],e.pattern=this.translate([].shift.apply(arguments),e),e.actions=[].slice.apply(arguments),this.routes.push(e)},translate:function(e,t){var n;return n=e.replace(/\//g,"\\/"),n=n.replace(/\)/g,function(){return")?"}),n=n.replace(/:(\w[\w\d]*)|\(/g,function(e,n){return t.params.push(e==="("?"_":n),e==="("?"(":"([^\\/]+?)"}),n=n.replace(/\*/g,function(){return t.params.push("splat"),"(.+?)"}),new RegExp("^"+n+"$")},match:function(e){var t,n,r,i,s,o;for(s=0;s<this.routes.length;s++){t=this.routes[s],n={actions:t.actions,params:{}},i=e.match(t.pattern);if(i){for(o=1;o<i.length;o++)r=t.params[o-1],r==="splat"?"splat"in n.params?n.params.splat.push(i[o]):n.params.splat=[i[o]]:n.params[r]=i[o];return n}}}},typeof window=="object"?typeof window.define=="function"&&"amd"in window.define?window.define("way",function(){return new t}):window.way=new t:typeof module=="object"&&"exports"in module&&(module.exports=new t)})();
