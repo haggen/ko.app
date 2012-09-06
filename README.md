@@ -69,7 +69,7 @@ Note that inside your application's constructor you can access `app` by `this`.
 
 ### `map(string pattern, function(context) action[, function(context) action[, ...]])`
 
-Map new route to given action. Actions may return `true` to chain more routes that matches the current path. Also within the action `this` refers to the application.
+Register new route. Actions may return `true` to keep chaining the next action. Also within the action `this` refers to the application.
 
 ### `session(string name[, string value|null])`
 
