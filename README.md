@@ -61,7 +61,7 @@ Now open `index.html` in your browser. Try changing `world` to your name, it wor
 
 You can see a working version of this example in the `example/` directory.
 
-Also I've included another example to demo the usage of [requirejs](http://requirejs.org/).
+Also I've included another example to demo the usage of [requirejs](http://requirejs.org/), as suggested by @adimkov.
 
 ## API:
 
