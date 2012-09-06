@@ -1,5 +1,5 @@
 /*
- * Knockout Application v0.2.4 2012-09-06 13:09:35 -0300
+ * Knockout Application v0.2.5 2012-09-06 13:09:35 -0300
  * by Arthur Corenzan <arthur@corenzan.com>
  * licensed under http://creativecommons.org/licenses/by/3.0
  * more on http://haggen.github.com/ko.app
@@ -26,8 +26,8 @@
       app.params = {};
 
       // Map new route and action
-      app.map = function(pattern, action) {
-        way.map(pattern, action);
+      app.map = function() {
+        way.map.apply(way, arguments);
       };
 
       // Session management
