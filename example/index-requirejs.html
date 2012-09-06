@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ko.app example with require</title>
+</head>
+<body>
+
+<div data-bind="app"></div>
+
+<script src="require.js"></script>
+
+<script>
+require(['../ko.app.js'], function(app) {
+  app(function() {
+    this.map('#/hello/:name', function(context) {
+      context.name = ko.observable(this.params.name);
+      this.render('hello');
+    });
+
+    this.root = '#/hello/world';
+
+    this.run();
+  });
+});
+</script>
+
+</body>
+</html>
